@@ -1,10 +1,9 @@
-# What is the purpose of this repository
-Collection of tools and other interesting stuff around Spinnaker
+# Use me for 
+getting started with (Spinnaker)[www.spinnaker.io]
 
 # What you can find here
-
-## Sample Spinnaker configuration
-
-## Spinnaker Reference Pipelines
-
+  - sample spinnaker configuration
+  - sample docker files for roer and spin cli
+  - sample jenkins pipeline to automate spinnaker deployment
+  - sample spinnaker pipelines
 
