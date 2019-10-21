@@ -1,5 +1,5 @@
 # Use me for 
-getting started with (Spinnaker)[www.spinnaker.io]
+getting started with [Spinnaker](www.spinnaker.io)
 
 # What you can find here
   - sample spinnaker configuration
