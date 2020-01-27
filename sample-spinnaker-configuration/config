@@ -1,1 +1,364 @@
 # sample config
+currentDeployment: dev
+deploymentConfigurations:
+  - name: dev
+    version: 1.16.3
+    providers:
+      appengine:
+        enabled: false
+        accounts: []
+      aws:
+        enabled: false
+        accounts: []
+        bakeryDefaults:
+          baseImages: []
+        defaultKeyPairTemplate: '{{name}}-keypair'
+        defaultRegions:
+          - name: us-west-2
+        defaults:
+          iamRole: BaseIAMRole
+      ecs:
+        enabled: false
+        accounts: []
+      azure:
+        enabled: false
+        accounts: []
+        bakeryDefaults:
+          templateFile: azure-linux.json
+          baseImages: []
+      dcos:
+        enabled: false
+        accounts: []
+        clusters: []
+      dockerRegistry:
+        enabled: true
+        accounts:
+          - name: my-docker-registry
+            requiredGroupMembership: []
+            providerVersion: V2
+            permissions:
+              READ:
+                - mygroup
+              WRITE:
+                - mygroup
+            address: 'https://mydocker.registry.com'
+            username: my-user
+            password: apassword
+            email: fake.email@spinnaker.io
+            cacheIntervalSeconds: 30
+            clientTimeoutMillis: 60000
+            cacheThreads: 1
+            paginateSize: 100
+            sortTagsByDate: false
+            trackDigests: false
+            insecureRegistry: false
+            repositories: []
+        primaryAccount:  my-docker-registry
+      google:
+        enabled: true
+        accounts:
+          - name: gcp-account
+            alphaListed: false
+            jsonPath:  /.gcp/gce-account.json
+            project: my-gcp-project
+        bakeryDefaults:
+          templateFile: gce.json
+          baseImages: []
+          zone: europe-west3-a
+          network: default
+          useInternalIp: false
+      kubernetes:
+        enabled: true
+        accounts:
+          - name: my-gke-cluster
+            liveManifestCalls: true
+            requiredGroupMembership: []
+            providerVersion: V2
+            permissions: {}
+            dockerRegistries: []
+            context: my-gke-cluster-context
+            configureImagePullSecrets: true
+            cacheThreads: 1
+            namespaces: []
+            omitNamespaces: []
+            kinds: []
+            omitKinds: []
+            customResources: []
+            cachingPolicies: []
+            kubeconfigFile: /.kube/config
+            oAuthScopes: []
+            onlySpinnakerManaged: true
+        primaryAccount: my-gke-cluster
+      openstack:
+        enabled: false
+        accounts: []
+        bakeryDefaults:
+          baseImages: []
+      oracle:
+        enabled: false
+        accounts: []
+        bakeryDefaults:
+          templateFile: oci.json
+          baseImages: []
+    deploymentEnvironment:
+      size: MEDIUM
+      type: Distributed
+      accountName: my-gke-cluster
+      updateVersions: true
+      consul:
+        enabled: false
+      vault:
+        enabled: false
+      customSizing:
+        clouddriver-caching:
+          replicas: 2
+        clouddriver-rw:
+          replicas: 2
+        clouddriver-ro:
+          replicas: 2
+        clouddriver-ro-deck:
+          replicas: 2
+      sidecars: {}
+      initContainers: {}
+      hostAliases: {}
+      nodeSelectors: {}
+      gitConfig:
+        upstreamUser: spinnaker
+      haServices:
+        clouddriver:
+          enabled: true
+          disableClouddriverRoDeck: true
+        echo:
+          enabled: false
+    persistentStorage:
+      persistentStoreType: gcs
+      azs: {}
+      gcs:
+        jsonPath: /.gcp/gce-account.json
+        project: my-gcp-project
+        bucket: spinnaker-dev-config
+        rootFolder: front50
+        bucketLocation: europe-west3
+      redis: {}
+      s3:
+        rootFolder: front50
+      oracle: {}
+    features:
+      auth: true
+      fiat: true
+      chaos: true
+      entityTags: false
+      jobs: true
+      pipelineTemplates: true
+      artifacts: true
+      gremlin: true
+      managedPipelineTemplatesV2UI: true
+    metricStores:
+      datadog:
+        enabled: false
+        tags: []
+      prometheus:
+        enabled: true
+        push_gateway: 'http://prometheus-pushgateway.monitoring.svc.cluster.local:9091'
+        add_source_metalabels: true
+      stackdriver:
+        enabled: true
+        credentials_path: /.gcp/gce-account.json
+      period: 30
+      enabled: true
+    notifications:
+      slack:
+        enabled: true
+        botName: my-spinnaker-bot
+        token: myslackbottoken
+      twilio:
+        enabled: false
+        baseUrl: 'https://api.twilio.com/'
+    timezone: America/Toronto
+    ci:
+      concourse:
+        enabled: true
+        masters:
+          - name: my-concourse
+            url: 'https://my-concourse.node.com/'
+            username: concourse
+            password: mypassword
+            permissions:
+              READ:
+                - mygroup
+              WRITE:
+                - mygroup
+      jenkins:
+        enabled: true
+        masters:
+          - name: tnt
+            address: 'https://my-jenkins.node.com'
+            username: jenkins
+            password: mypassword
+            csrf: true
+            trustStore: spinnaker-truststore.jks
+            trustStoreType: jks
+            trustStorePassword: mytruststorepassword
+      travis:
+        enabled: false
+        masters: []
+      wercker:
+        enabled: false
+        masters: []
+    security:
+      apiSecurity:
+        ssl:
+          enabled: true
+          keyAlias: mydomain.com
+          keyStore: mydomain-keystore.jks
+          keyStoreType: jks
+          keyStorePassword: mykeystorepassword
+          trustStore: spinnaker-truststore.jks
+          trustStoreType: jks
+          trustStorePassword: mytruststorepassword
+          clientAuth: WANT
+        overrideBaseUrl: 'https://spinnaker-api.mydomain.com:8084'
+      uiSecurity:
+        ssl:
+          enabled: true
+          sslCertificateFile: spinnaker.crt
+          sslCertificateKeyFile: spinnaker.key
+          sslCertificatePassphrase: mycertpassphrase
+        overrideBaseUrl: 'https://spinnaker-deck.mydomain.com:9000'
+      authn:
+        oauth2:
+          enabled: false
+          client: {}
+          resource: {}
+          userInfoMapping: {}
+        saml:
+          enabled: false
+          metadataLocal: metadata.xml
+          issuerId: myissuer
+          keyStore: saml.jks
+          keyStorePassword: mykeystorepassword
+          keyStoreAliasName: saml
+          serviceAddress: 'https://spinnaker-api.mydomain.com:8084'
+        ldap:
+          enabled: false
+          url: ldap://myldapserver.mydomain.com/dc=mydc
+          managerDn: mydn@myldapserver.mydomain.com
+          managerPassword: mymanagerpassword
+          userSearchBase: ou=Identities
+          userSearchFilter: (&(objectClass=user)(sAMAccountName={0}))
+        x509:
+          enabled: true
+          roleOid: 1.2.840.10070.8.1
+        iap:
+          enabled: false
+        enabled: true
+      authz:
+        groupMembership:
+          service: FILE
+          google:
+            roleProviderType: GOOGLE
+          github:
+            roleProviderType: GITHUB
+          file:
+            roleProviderType: FILE
+            path: userrole.yml
+          ldap:
+            roleProviderType: LDAP
+        enabled: true
+    artifacts:
+      bitbucket:
+        enabled: false
+        accounts: []
+      gcs:
+        enabled: true
+        accounts:
+          - name: spinnaker-artifacts
+            jsonPath: /.gcp/gce-account.json
+      oracle:
+        enabled: false
+        accounts: []
+      github:
+        enabled: true
+        accounts:
+          - name: github-account
+            username: mygithubuser
+            token: mygithubtoken
+            tokenFile: mygithub-password-file
+      gitlab:
+        enabled: false
+        accounts: []
+      http:
+        enabled: true
+        accounts:
+          - name: http-server
+            username: myserverusername
+            password: myserverpassword
+            usernamePasswordFile: myhttpserver-password-file
+      helm:
+        enabled: true
+        accounts:
+          - name: my-helm-repo
+            repository: 'https://myhelmserver.mydomain.com/myrepo'
+            username: myhelmaccount
+            password: myhelmpassword
+            usernamePasswordFile: myhelmrepo-password-file
+      s3:
+        enabled: false
+        accounts: []
+      templates: []
+    pubsub:
+      enabled: false
+      google:
+        enabled: false
+        pubsubType: GOOGLE
+        subscriptions: []
+        publishers: []
+    canary:
+      enabled: true
+      serviceIntegrations:
+        - name: google
+          enabled: true
+          accounts:
+            - name: my-spinnaker-canary
+              project: my-gcp-project
+              jsonPath: /.gcp/gce-account.json
+              bucket: my-spinnaker-kayenta-bucket
+              rootFolder: kayenta
+              supportedTypes:
+                - METRICS_STORE
+                - CONFIGURATION_STORE
+                - OBJECT_STORE
+          gcsEnabled: true
+          stackdriverEnabled: true
+        - name: prometheus
+          enabled: false
+          accounts:
+            - name: ccloud
+              endpoint:
+                baseUrl: >-
+                  http://prometheus-pushgateway.monitoring.svc.cluster.local:9091
+              supportedTypes:
+                - METRICS_STORE
+        - name: datadog
+          enabled: false
+          accounts: []
+        - name: signalfx
+          enabled: false
+          accounts: []
+        - name: aws
+          enabled: false
+          accounts: []
+          s3Enabled: false
+      reduxLoggerEnabled: true
+      defaultMetricsAccount: my-spinnaker-canary
+      defaultStorageAccount: my-spinnaker-canary
+      defaultJudge: NetflixACAJudge-v1.0
+      defaultMetricsStore: my-gcp-project
+      stagesEnabled: true
+      templatesEnabled: true
+      showAllConfigsEnabled: true
+    webhook:
+      trust:
+        enabled: true
+        trustStore: spinnaker-trustore.jks
+        trustStorePassword: mytruststorepassword
