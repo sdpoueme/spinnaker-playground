@@ -1,0 +1,34 @@
+
+#
+grafana:
+  enabled: grafana
+prometheus:
+  enabled: true
+  storageSpec:
+    volumeClaimTemplate:
+        spec:
+          # Name of the PV you created beforehand
+          volumeName: solinas-prometheus-pv
+          accessModes: ["ReadWriteOnce"]
+          # StorageClass should match your existing PV's storage class
+          storageClassName: default
+          resources:
+            requests:
+              # Size below should match your existing PV's size
+              storage: 500  
+  prometheusSpec:
+    retention: 30d
+    additionalScrapeConfigs:
+      - job_name: 'spinnaker'
+        kubernetes_sd_configs:
+        - role: endpoints
+          namespaces:
+            names:
+            - spinnaker
+        relabel_configs:
+        - action: keep
+          source_labels:
+          - __meta_kubernetes_service_label_app
+          regex: spin
+        metrics_path: '/prometheus_metrics'
+        honor_labels: true
