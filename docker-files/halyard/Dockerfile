@@ -21,7 +21,6 @@ USER root
 RUN curl -o /tmp/InstallHalyard.sh -L https://raw.githubusercontent.com/spinnaker/halyard/master/install/debian/InstallHalyard.sh
 RUN chmod +x /tmp/InstallHalyard.sh
 RUN /tmp/InstallHalyard.sh --user hal --version 1.31.1 -y
-COPY halyard.yml /opt/spinnaker/config/halyard.yml
 RUN  pip3 install awscli --upgrade
 USER hal
 RUN which aws
