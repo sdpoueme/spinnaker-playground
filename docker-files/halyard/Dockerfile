@@ -1,4 +1,4 @@
-FROM docker.wdf.sap.corp:50000/ubuntu:16.04
+FROM ubuntu:16.04
 RUN apt-get update -y
 RUN apt-get install python python3-pip git unzip software-properties-common apt-transport-https curl procps wget ca-certificates gnupg2 -y
 RUN curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
